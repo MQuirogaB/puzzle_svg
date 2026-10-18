@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Generador de puzles · SVG para láser · miguelquiroga.es</title>
+<meta name="description" content="Crea puzles para corte láser: elige tamaño, número de piezas y tipo de pieza (clásica, recta, ondulada, hexagonal, triangular) y descarga un SVG de un solo color, con marco y base opcionales.">
+<meta name="theme-color" content="#9a6bb4">
+<link rel="stylesheet" href="./style.css?v=2">
+</head>
+<body>
+
+<main class="wrap">
+  <h1>Generador de puzles</h1>
+  <p class="subtitle">
+    Elige el tamaño, el número de piezas y el tipo de pieza y descarga un SVG para cortar con láser. Todo va de un solo color y cada línea de corte
+    aparece una sola vez, así que el láser no pasa dos veces por el mismo sitio. Todo ocurre en tu navegador: no se sube nada a ningún servidor.
+  </p>
+
+  <div class="layout">
+    <div class="col-controls">
+
+      <div class="card">
+        <p class="card-label">Tipo de pieza</p>
+        <div class="shapes" id="tipos" role="radiogroup" aria-label="Tipo de pieza"></div>
+        <p class="note" id="tipo-nota"></p>
+      </div>
+
+      <div class="card">
+        <p class="card-label">Tamaño y piezas</p>
+        <div class="row"><label for="ancho">Ancho del puzle (mm)</label><input type="number" id="ancho" min="20" max="2000" step="1"></div>
+        <div class="row"><label for="alto">Alto del puzle (mm)</label><input type="number" id="alto" min="20" max="2000" step="1"></div>
+        <div class="row"><label for="piezas">Número de piezas (aprox.)</label><input type="number" id="piezas" min="2" max="2000" step="1"></div>
+        <p class="note" id="cuenta" role="status"></p>
+      </div>
+
+      <details class="card panel">
+        <summary>
+          <span class="card-label">Ajustes de las piezas</span>
+          <span class="panel-hint">Lengüetas, ondas y semilla</span>
+        </summary>
+        <div class="panel-body">
+          <div class="row"><label for="lengueta">Tamaño de la lengüeta (%)</label><input type="number" id="lengueta" min="8" max="30" step="1"></div>
+          <div class="row"><label for="irregular">Irregularidad de las lengüetas (%)</label><input type="number" id="irregular" min="0" max="10" step="0.5"></div>
+          <div class="row"><label for="onda">Amplitud de la ondulación (%)</label><input type="number" id="onda" min="2" max="30" step="1"></div>
+          <div class="row"><label for="columnas">Columnas (0 = automático)</label><input type="number" id="columnas" min="0" max="100" step="1"></div>
+          <div class="row"><label for="filas">Filas (0 = automático)</label><input type="number" id="filas" min="0" max="100" step="1"></div>
+          <div class="row"><label for="semilla">Semilla (cambia el reparto al azar)</label>
+            <span class="inline"><input type="number" id="semilla" step="1"><button type="button" class="btn small" id="otro-btn">Otro puzle</button></span></div>
+          <p class="note">Columnas y filas solo valen en rejilla cuadrada o triangular. Con la misma semilla y los mismos ajustes sale siempre el mismo puzle.</p>
+        </div>
+      </details>
+
+      <details class="card panel">
+        <summary>
+          <span class="card-label">Marco y base</span>
+          <span class="panel-hint">Opcionales</span>
+        </summary>
+        <div class="panel-body">
+          <div class="row"><label for="marco">Marco</label>
+            <select id="marco">
+              <option value="none">Sin marco</option>
+              <option value="marco">Marco alrededor del puzle</option>
+              <option value="marco-base">Marco + base para pegarlo</option>
+            </select></div>
+          <div class="row"><label for="anchoMarco">Anchura del marco (mm)</label><input type="number" id="anchoMarco" min="3" max="100" step="1"></div>
+          <div class="row"><label for="separacion">Separación marco-base (mm)</label><input type="number" id="separacion" min="1" max="100" step="1"></div>
+          <p class="note">El marco es un anillo que rodea al puzle (el corte exterior del puzle es también el borde interior del marco, así que se corta una sola vez). La base es una placa del mismo tamaño total, para pegar el marco encima.</p>
+        </div>
+      </details>
+
+      <details class="card panel">
+        <summary>
+          <span class="card-label">Contorno y color</span>
+          <span class="panel-hint">Esquinas, color y línea</span>
+        </summary>
+        <div class="panel-body">
+          <div class="row"><label for="esquinas">Esquinas redondeadas (mm)</label><input type="number" id="esquinas" min="0" max="50" step="0.5"></div>
+          <div class="row"><label for="color">Color de corte</label><input type="color" id="color"></div>
+          <div class="row"><label for="grosor">Grosor de línea (mm)</label><input type="number" id="grosor" min="0.01" max="2" step="0.01"></div>
+          <button type="button" class="link" id="reset-btn">Restaurar valores por defecto</button>
+        </div>
+      </details>
+
+      <div class="actions">
+        <button class="btn primary" id="download-btn" type="button" disabled>Descargar SVG</button>
+      </div>
+      <div id="status" role="status">Cargando…</div>
+    </div>
+
+    <div class="col-viewport">
+      <div class="viewport-card">
+        <div id="svg-holder" aria-live="polite"></div>
+        <div id="stats"></div>
+      </div>
+      <div id="avisos" role="status"></div>
+    </div>
+  </div>
+</main>
+
+<footer class="foot">
+  <p>Hecho con ♥ para el aula · <a href="https://miguelquiroga.es">miguelquiroga.es</a></p>
+</footer>
+
+<script type="module" src="./app.js?v=1"></script>
+</body>
+</html>
